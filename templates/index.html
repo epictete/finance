@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Symbol</th>
+          <th scope="col">Name</th>
+          <th scope="col">Shares</th>
+          <th scope="col">Buy / Sell</th>
+          <th scope="col">Price</th>
+          <th scope="col">TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+         {% for row in rows %}
+            <tr>
+              <td scope="row">{{ row["symbol"].upper() }}</td>
+              <td>{{ row["name"] }}</td>
+              <td>{{ row["shares"] }}</td>
+              <td>
+                <a href="buy/{{ row['symbol'] }}" class="btn btn-primary"><i class="fas fa-plus"> </i></a>
+                <a href="sell/{{ row['symbol'] }}" class="btn btn-secondary"> <i class="fas fa-minus"></i></a>
+              </td>
+              <td>{{ row["price"] }}</td>
+              <td>{{ row["sum"] }}</td>
+            </tr>
+        {% endfor %}
+        <tr class="table-primary">
+          <td scope="row">CASH</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{ cash }}</td>
+        </tr>
+        <tr>
+          <td scope="row"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <th>{{ total }}</th>
+        </tr>
+
+      </tbody>
+    </table>
+{% endblock %}
