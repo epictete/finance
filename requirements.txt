@@ -4,4 +4,4 @@ Flask-Session
 requests
 werkzeug
 gunicorn
-# psycopg2
+psycopg2
