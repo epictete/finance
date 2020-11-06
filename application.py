@@ -12,6 +12,7 @@ from helpers import apology, login_required, lookup, usd
 
 # Configure application
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -28,10 +29,12 @@ def after_request(response):
 app.jinja_env.filters["usd"] = usd
 
 # Configure session to use filesystem (instead of signed cookies)
+"""
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+"""
 
 # Configure CS50 Library to use SQLite database
 # db = SQL("sqlite:///finance.db")
@@ -108,6 +111,7 @@ def buy():
         db.execute("UPDATE users SET cash=? WHERE id=?", balance, user)
 
         # Redirect user to index page
+        flash("Bought!")
         return redirect("/")
 
 
@@ -138,7 +142,8 @@ def login():
     """Log user in"""
 
     # Forget any user_id
-    session.clear()
+    # session.clear()
+    session.pop('user_id', None)
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -163,6 +168,8 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
+        username = request.form.get("username")
+        flash("Welcome!")
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -175,9 +182,11 @@ def logout():
     """Log user out"""
 
     # Forget any user_id
-    session.clear()
+    # session.clear()
+    session.pop('user_id', None)
 
     # Redirect user to login form
+    flash("Goodbye!")
     return redirect("/")
 
 
@@ -238,6 +247,7 @@ def register():
         db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)", username=username, hash=hash)
 
         # Redirect user to login form
+        flash("Registered!")
         return redirect("/")
 
 
@@ -288,6 +298,7 @@ def sell():
         balance = cash[0]["cash"] - (shares * res["price"])
         db.execute("UPDATE users SET cash=? WHERE id=?", balance, user)
 
+        flash("Sold!")
         return redirect("/")
 
 
