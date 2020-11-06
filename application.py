@@ -3,7 +3,6 @@ import os
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
-from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
@@ -28,21 +27,10 @@ def after_request(response):
 # Custom filter
 app.jinja_env.filters["usd"] = usd
 
-# Configure session to use filesystem (instead of signed cookies)
-"""
-app.config["SESSION_FILE_DIR"] = mkdtemp()
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-"""
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
-# db = SQL("postgres://pidjnvvssnwpuo:555e49aa2554f2f9d7414faf5b2dcd8f990d98aa846b173cbae1f0bc014c04d5@ec2-3-210-23-22.compute-1.amazonaws.com:5432/da8gk85auqkp45")
 
-# Make sure API key is set
-# if not os.environ.get("API_KEY"):
-#     raise RuntimeError("API_KEY not set")
 
 @app.route("/")
 @login_required
@@ -142,8 +130,7 @@ def login():
     """Log user in"""
 
     # Forget any user_id
-    # session.clear()
-    session.pop('user_id', None)
+    session.clear()
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -182,8 +169,7 @@ def logout():
     """Log user out"""
 
     # Forget any user_id
-    # session.clear()
-    session.pop('user_id', None)
+    session.clear()
 
     # Redirect user to login form
     flash("Goodbye!")

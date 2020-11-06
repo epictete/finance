@@ -29,8 +29,7 @@ def login_required(f):
     """
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # if session.get("user_id") is None:
-        if "user_id" not in session:
+        if session.get("user_id") is None:
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
@@ -41,7 +40,6 @@ def lookup(symbol):
 
     # Contact API
     try:
-        # api_key = os.environ.get("API_KEY")
         api_key = "pk_a67e6b616049428db008f75523caf27c"
         response = requests.get(f"https://cloud-sse.iexapis.com/stable/stock/{urllib.parse.quote_plus(symbol)}/quote?token={api_key}")
         response.raise_for_status()
